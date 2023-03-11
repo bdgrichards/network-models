@@ -1,3 +1,5 @@
+# Code based on the original file by:
+
 ################################################################################
 # Max Falkenberg McGillivray
 # mff113@ic.ac.uk
@@ -14,7 +16,8 @@
 
 import numpy as np
 
-def logbin(data, scale = 1., zeros = False):
+
+def logbin(data, scale=1., zeros=False):
     """
     logbin(data, scale = 1., zeros = False)
 
@@ -72,24 +75,31 @@ def logbin(data, scale = 1., zeros = False):
             binedges = scale ** np.arange(jmax + 1)
             binedges[0] = 0
         else:
-            binedges = scale ** np.arange(1,jmax + 1)
+            binedges = scale ** np.arange(1, jmax + 1)
             # count = count[1:]
         binedges = np.unique(binedges.astype('uint64'))
         x = (binedges[:-1] * (binedges[1:]-1)) ** 0.5
         y = np.zeros_like(x)
+        y_err = np.zeros_like(x)
         count = count.astype('float')
         for i in range(len(y)):
-            y[i] = np.sum(count[binedges[i]:binedges[i+1]]/(binedges[i+1] - binedges[i]))
+            y[i] = np.sum(count[binedges[i]:binedges[i+1]] /
+                          (binedges[i+1] - binedges[i]))
+            y_err[i] = np.std(count[binedges[i]:binedges[i+1]]) / \
+                np.sqrt(np.sum(count[binedges[i]:binedges[i+1]]))
             # print(binedges[i],binedges[i+1])
         # print(smax,jmax,binedges,x)
         # print(x,y)
     else:
         x = np.nonzero(count)[0]
         y = count[count != 0].astype('float')
+        y_err = count[count != 0].astype('float')
         if zeros != True and x[0] == 0:
             x = x[1:]
             y = y[1:]
     y /= tot
-    x = x[y!=0]
-    y = y[y!=0]
-    return x,y
+    y_err /= tot
+    x = x[y != 0]
+    y_err = y_err[y != 0]
+    y = y[y != 0]
+    return x, y, y_err
