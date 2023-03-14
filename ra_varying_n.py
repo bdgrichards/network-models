@@ -37,7 +37,6 @@ for n in n_values:
     # if saved data, use that, else generate new data
     try:
         # attempt to load the data file
-        # raise (Exception("Skip cache"))
         with open(data_folder + filename + str('_%d' % n), "rb") as f:
             data = pickle.load(f)
     except:

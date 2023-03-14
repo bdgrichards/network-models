@@ -4,7 +4,6 @@ import numpy as np
 from logbin import logbin
 from utils import data_folder, figures_folder
 import pickle
-import scipy as sp
 
 n = 1000
 m_values = [2, 4, 8, 16, 32]
