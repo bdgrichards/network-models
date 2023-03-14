@@ -1,6 +1,7 @@
 from ba_network import ba_network
 import numpy as np
 import networkx as nx
+import matplotlib.pyplot as plt
 
 
 def test_1():
@@ -56,6 +57,7 @@ def test_5():
     m = 2
     G = ba_network(n, m)
     nx.draw_networkx(G)
+    plt.show()
 
 
 def test_6():
@@ -70,6 +72,3 @@ def test_7():
     Check invalid m and n combinations aren't allowed
     """
     G = ba_network(5, 5)
-
-
-test_7()

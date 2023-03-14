@@ -15,6 +15,7 @@ fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
 ax1 = fig.add_subplot(111)
 
 k1_values = []
+k1_errs = []
 for n in n_values:
     data = []
     # if saved data, use that, else generate new data
@@ -34,7 +35,9 @@ for n in n_values:
         with open(data_folder + filename + str('_%d' % n), "wb") as f:
             pickle.dump(data, f)
     k1_values.append(np.mean(data))
+    k1_errs.append(np.std(data)/np.sqrt(np.sum(data)))
     print(n, "complete")
+print("Max err: %.3f min err: %.3f" % (max(k1_errs), min(k1_errs)))
 
 
 def expected_k1(n, m):
@@ -46,12 +49,14 @@ def power_law(k, a):
 
 
 popt, pcov = optimize.curve_fit(power_law, n_values, k1_values)
+print("Fit: %.4f +/- %.4f" % (popt[0], pcov[0]))
 
 ax1.plot(n_values, [expected_k1(n, m)
-         for n in n_values], label='Expected', c='k')
-ax1.scatter(n_values, k1_values, label='Observed')
+         for n in n_values], label='Expected', c='k', linestyle='dashed')
+ax1.scatter(n_values, k1_values, label='Observed',
+            marker='x')  # type:ignore
 ax1.plot(n_values, power_law(n_values, *popt),
-         label=r'$%.2f * N^{0.5}$ Fit' % popt[0], linestyle='dashed')
+         label=r'$\alpha N^{1/2}$ Fit', linestyle='dashed', alpha=0.3)
 ax1.set_xlabel(r"$N$")
 ax1.set_ylabel("$k_1$")
 ax1.set_xscale('log')

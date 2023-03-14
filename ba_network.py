@@ -38,7 +38,7 @@ def ba_network(n: int, m: int):
         G.add_node(new_node)
         # add new edges
         G.add_edges_from([(new_node, target) for target in target_nodes])
-        # Add one node to the list for each new edge just created.
+        # add one node to the list for each new edge just created.
         node_choices.extend(target_nodes)
         # add new node to the list of node choices
         node_choices.extend(m*[new_node])

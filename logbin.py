@@ -1,4 +1,4 @@
-# Code based on the original file by:
+# Addition of y errors to the original file by:
 
 ################################################################################
 # Max Falkenberg McGillivray
@@ -83,17 +83,23 @@ def logbin(data, scale=1., zeros=False):
         y_err = np.zeros_like(x)
         count = count.astype('float')
         for i in range(len(y)):
-            y[i] = np.sum(count[binedges[i]:binedges[i+1]] /
+            y_counts = count[binedges[i]:binedges[i+1]]
+            y[i] = np.sum(y_counts /
                           (binedges[i+1] - binedges[i]))
-            y_err[i] = np.std(count[binedges[i]:binedges[i+1]]) / \
-                np.sqrt(np.sum(count[binedges[i]:binedges[i+1]]))
+            if np.sum(y_counts) == 0:
+                y_err[i] = 0
+            else:
+                y_std = np.std(y_counts) / \
+                    (binedges[i+1] - binedges[i])
+                y_err[i] = y_std / \
+                    np.sqrt(np.sum(y_counts))
             # print(binedges[i],binedges[i+1])
         # print(smax,jmax,binedges,x)
         # print(x,y)
     else:
         x = np.nonzero(count)[0]
         y = count[count != 0].astype('float')
-        y_err = count[count != 0].astype('float')
+        y_err = np.zeros_like(y)
         if zeros != True and x[0] == 0:
             x = x[1:]
             y = y[1:]
