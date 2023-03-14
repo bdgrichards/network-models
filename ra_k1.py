@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from utils import data_folder, figures_folder
 import pickle
 import numpy as np
+from scipy.optimize import curve_fit
 
 m = 10
 n_values = [128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]
 repeats = 100
-logbin_scale = 1.15
 filename = 'ra_k1'
 
 fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
@@ -37,19 +37,28 @@ for n in n_values:
 
 
 def expected(N, m):
-    return np.log(((m+1)/N)*(m/(m+1)**m)) / np.log(m/(m+1))
+    return m + (np.log(N) / (np.log(m+1) - np.log(m)))
 
 
-# popt, pcov = curve_fit(power_law, n_values, k1_values)
+def fit(x, a, b):
+    return a*np.log(x) + b
 
-ax1.scatter(n_values, k1_values, label='Measured')
-ax1.scatter(n_values, [expected(n, m) for n in n_values],
-            label='Expected')
-ax1.legend()
+
+popt, pcov = curve_fit(fit, n_values, k1_values, p0=(1, 1))
+print("Fit: y = %.4f +/- %.4f ln(N) + %.4f +/- %.4f" %
+      (popt[0], np.sqrt(pcov[0, 0]), popt[1], np.sqrt(pcov[1, 1])))
+ax1.plot(n_values, [expected(n, m) for n in n_values],
+         label='Expected', c='k', linestyle='dashed')
+ax1.scatter(n_values, k1_values, label='Observed',
+            c='C0', marker='x')  # type:ignore
+ax1.plot(n_values, [fit(n, *popt) for n in n_values],
+         label=r'$\alpha \ln N + \beta$ Fit', c='C0', linestyle='dashed', alpha=0.3)
+
+ax1.set_xscale('log')
 ax1.set_xlabel("N")
 ax1.set_ylabel("$k_1$")
-ax1.set_xscale('log')
-ax1.set_yscale('log')
+ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left',
+           borderaxespad=0.)
 
 plt.savefig(figures_folder + 'ra_k1.svg',
             format='svg', bbox_inches='tight')
