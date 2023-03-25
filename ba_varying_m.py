@@ -5,6 +5,7 @@ from logbin import logbin
 from utils import data_folder, figures_folder
 import pickle
 
+# setup parameters
 n = 10000
 m_values = [2, 4, 8, 16, 32]
 repeats = 100
@@ -14,6 +15,10 @@ p_cutoff = 1e-4
 
 
 def predicted_func(k):
+    """
+    The predicted degree distribution for a given value of k, 
+    when divided by 2m(m+1)
+    """
     return 1/(k*(k+1)*(k+2))
 
 
@@ -23,7 +28,7 @@ chi_sqr_y_vals = []
 chi_sqr_y_errs = []
 
 # setup subplots
-fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
+fig = plt.figure(figsize=(6.4, 3), tight_layout=True)
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
 
@@ -63,7 +68,7 @@ for m in m_values:
     x_scaled = [x[i] for i in range(len(y)) if y[i] > p_cutoff]
     y_scaled = [i/(2*m*(m+1)) for i in y if i > p_cutoff]
 
-    # saved scaled data ready for chi squared test
+    # saved scaled data for chi squared test
     chi_sqr_y_vals.extend(y_scaled)
     chi_sqr_x_vals.extend(x_scaled)
     chi_sqr_y_errs.extend(yerr_scaled)

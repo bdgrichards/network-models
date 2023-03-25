@@ -63,6 +63,8 @@ def logbin(data, scale=1., zeros=False):
     y: array_like, 1 dimensional
           Array of normalised frequency counts within each bin. Bins with a
           count of 0 will not be returned.
+    y_err: array_like, 1 dimensional
+          Array of errors on the y values.
     """
     if scale < 1:
         raise ValueError('Function requires scale >= 1.')

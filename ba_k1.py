@@ -5,16 +5,19 @@ import pickle
 import numpy as np
 from scipy import optimize
 
+# parameters
 m = 10
 n_values = [128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]
 repeats = 100
 logbin_scale = 1.15
 filename = 'ba_k1'
 
-fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
+# create figure
+fig = plt.figure(figsize=(6.4, 3), tight_layout=True)
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
 
+# get data
 k1_values = []
 k1_errs = []
 for n in n_values:
@@ -42,16 +45,24 @@ print("Max err: %.3f min err: %.3f" % (max(k1_errs), min(k1_errs)))
 
 
 def expected_k1(n, m):
+    """
+    Return the expected k1 for a given n and m
+    """
     return -(1/2) + np.sqrt((1/4) + n*m*(m+1))
 
 
 def power_law(k, a):
+    """
+    A power law function for fitting
+    """
     return a*np.array(k)**0.5
 
 
+# fit the power law to the data
 popt, pcov = optimize.curve_fit(power_law, n_values, k1_values)
 print("Fit: %.4f +/- %.4f" % (popt[0], pcov[0]))
 
+# plotting lin-log on subplot (A)
 ax1.set_xscale('log')
 ax1.scatter(n_values, k1_values, label='Observed',
             marker='x')  # type:ignore
@@ -66,6 +77,7 @@ ax1.set_xlabel(r"$N$")
 ax1.set_ylabel("$k_1$")
 ax1.set_title("(A)")
 
+# plotting log-log on subplot (B)
 ax2.set_xscale('log')
 ax2.set_yscale('log')
 ax2.scatter(n_values, k1_values, label='Observed',

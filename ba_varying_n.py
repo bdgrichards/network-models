@@ -5,6 +5,7 @@ from utils import data_folder, figures_folder
 import pickle
 import numpy as np
 
+# parameters
 m = 10
 n_values = [1000000, 100000, 10000, 1000, 100]
 repeats = 100
@@ -17,14 +18,12 @@ def p_infinity(k, m):
     return 2*m*(m+1)/((k)*(k+1)*(k+2))
 
 
-def k1(n):
-    return -0.5 + np.sqrt(0.25 + n*m*(m+1))
-
-
-fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
+# create plots
+fig = plt.figure(figsize=(6.4, 3), tight_layout=True)
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
 
+# get data
 for n in n_values:
     data = []
     # if saved data, use that, else generate new data
@@ -44,16 +43,22 @@ for n in n_values:
         with open(data_folder + filename + str('_%d' % n), "wb") as f:
             pickle.dump(data, f)
 
+    # logbin the data
     x, y, yerr = logbin(data, logbin_scale)
+
+    # plot the data on subplot (A)
     ax1.errorbar(x, y, yerr, color="C%i" %
                  n_values.index(n), linestyle='', alpha=0.7)
     ax1.scatter(x, y, label=r"N = $10^{%i}$" % np.log10(
         n), color="C%i" % n_values.index(n), s=5, marker='x', linewidths=1)  # type:ignore
     ax1.plot(x, y, color="C%i" % n_values.index(n), alpha=0.2)
 
+    # collapse the data
     scaled_y = [y[i]/p_infinity(x[i], m) for i in range(len(y))]
     scaled_yerr = [yerr[i]/p_infinity(x[i], m) for i in range(len(y))]
     scaled_x = [x[i]/(n**D) for i in range(len(y))]
+
+    # plot the data collapse on subplot (B)
     ax2.errorbar(scaled_x, scaled_y, scaled_yerr, color="C%i" %
                  n_values.index(n), linestyle='', alpha=0.7)  # type:ignore
     ax2.scatter(scaled_x, scaled_y, label=r"N = $10^{%i}$" % np.log10(n), color="C%i" %
