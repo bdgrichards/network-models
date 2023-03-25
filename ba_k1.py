@@ -12,7 +12,8 @@ logbin_scale = 1.15
 filename = 'ba_k1'
 
 fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
-ax1 = fig.add_subplot(111)
+ax1 = fig.add_subplot(121)
+ax2 = fig.add_subplot(122)
 
 k1_values = []
 k1_errs = []
@@ -51,17 +52,35 @@ def power_law(k, a):
 popt, pcov = optimize.curve_fit(power_law, n_values, k1_values)
 print("Fit: %.4f +/- %.4f" % (popt[0], pcov[0]))
 
-ax1.plot(n_values, [expected_k1(n, m)
-         for n in n_values], label='Expected', c='k', linestyle='dashed')
+ax1.set_xscale('log')
 ax1.scatter(n_values, k1_values, label='Observed',
             marker='x')  # type:ignore
-ax1.plot(n_values, power_law(n_values, *popt),
+xmin1, xmax1 = ax1.get_xlim()
+xvals1 = np.linspace(xmin1, xmax1, 1000)
+ax1.plot(xvals1, [expected_k1(val, m)
+         for val in xvals1], label='Expected', c='k', linestyle='dashed', zorder=-10)
+ax1.plot(xvals1, power_law(xvals1, *popt),
          label=r'$\alpha N^{1/2}$ Fit', linestyle='dashed', alpha=0.3)
+ax1.set_xlim(xmin1, xmax1)
 ax1.set_xlabel(r"$N$")
 ax1.set_ylabel("$k_1$")
-ax1.set_xscale('log')
-ax1.set_yscale('log')
-ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left',
+ax1.set_title("(A)")
+
+ax2.set_xscale('log')
+ax2.set_yscale('log')
+ax2.scatter(n_values, k1_values, label='Observed',
+            marker='x')  # type:ignore
+xmin2, xmax2 = ax2.get_xlim()
+xvals2 = np.linspace(xmin2, xmax2, 1000)
+ax2.plot(xvals2, [expected_k1(val, m)
+         for val in xvals2], label='Expected', c='k', linestyle='dashed')
+ax2.plot(xvals2, power_law(xvals2, *popt),
+         label=r'$\alpha N^{1/2}$ Fit', linestyle='dashed', alpha=0.3)
+ax2.set_xlim(xmin2, xmax2)
+ax2.set_xlabel(r"$N$")
+ax2.set_ylabel("$k_1$")
+ax2.set_title("(B)")
+ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left',
            borderaxespad=0.)
 
 plt.savefig(figures_folder + 'ba_k1.svg',

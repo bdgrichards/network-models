@@ -5,7 +5,7 @@ from linbin import linbin
 from utils import data_folder, figures_folder
 import pickle
 
-n = 1000
+n = 10000
 m_values = [128, 64, 32, 16, 8, 4, 2]
 repeats = 100
 filename = 'ra_varying_m'
@@ -45,8 +45,6 @@ for m in m_values:
     ax1.scatter(x, y, color="C%i" % m_values.index(m), s=5,
                 marker='x', linewidths=1)  # type:ignore
     ax1.plot(x, y, color="C%i" % m_values.index(m), alpha=0.2)
-    ax1.plot(x, [predicted_function(k, m) for k in x], color="C%i" % m_values.index(m),
-             linestyle='dotted')
 
     ax2.scatter(x, y, color="C%i" % m_values.index(m), s=5,
                 label=m, marker='x', linewidths=1)  # type:ignore
@@ -56,8 +54,6 @@ for m in m_values:
 
     print(m, "complete")
 
-# ax1.set_xscale('log')
-# ax1.set_yscale('log')
 ax1.set_ylabel(r"$p(k)$")
 ax1.set_xlabel(r"$k$")
 ax1.set_title('(A)')
@@ -67,7 +63,7 @@ ax2.set_ylabel(r"$p(k)$")
 ax2.set_xlabel(r"$k$")
 ax2.set_title('(B)')
 ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left',
-           borderaxespad=0., title='m')
+           borderaxespad=0., title=r'$m$', markerscale=2)
 
 plt.savefig(figures_folder + 'ra_varying_m.svg',
             format='svg', bbox_inches='tight')

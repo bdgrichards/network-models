@@ -64,11 +64,11 @@ def test_6():
     """
     Check invalid m isn't allowed
     """
-    G = ba_network(10, 0)
+    ba_network(10, 0)
 
 
 def test_7():
     """
     Check invalid m and n combinations aren't allowed
     """
-    G = ba_network(5, 5)
+    ba_network(5, 5)

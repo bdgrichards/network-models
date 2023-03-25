@@ -22,19 +22,23 @@ filename = 'ev_varying_n'
 #     return (1/(m+1))*(m/(m+1))**(-m)
 
 
-def predicted_full(k):
-    alpha = 2/3
-    norm = (r*(1 + alpha) * sp.special.gamma(r + 2 + (r+1)/alpha)) / \
-        ((1 + alpha*r + r)*(r+1+alpha*(r+1)) * sp.special.gamma(r+1+r/alpha))
-    return norm * (sp.special.gamma(k + (m*r)/(m-r))) / (sp.special.gamma(k + 1 + (m*(r+1))/(m-r)))
+def predicted_full(k, r):
+    norm = (1/(1+(5/3)*r)) * sp.special.gamma((5/2)
+                                              * (r + 1)) / sp.special.gamma((5/2)*r)
+    if k < 100:
+        # full series
+        return norm * (sp.special.gamma(k + (3/2)*r)) / (sp.special.gamma(k + (3/2)*r + (5/2)))
+    else:
+        # puiseux approximation
+        return norm * ((k + (3/2)*r)**(-(5/2)) - (15/8)*(k + (3/2)*r)**(-(7/2)))
 
 
 def scale_y(p, k):
-    return p/predicted_full(k)
+    return p/predicted_full(k, r)
 
 
 def scale_x(k, n):
-    return k/(n**(1/2))
+    return k/(n**(0.52))
 
 
 fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
@@ -78,24 +82,26 @@ for n in n_values:
     print(n, "complete")
 
 
-x_min1, x_max1 = ax1.get_xlim()
-x_vals1 = np.linspace(m, x_max1, 1000)
-# ax1.plot(x_vals1, p_infinity(x_vals1, m), c='k',
-#          label=r'$p_\infty$', linestyle='dashed', alpha=0.3)
 ax1.set_yscale('log')
 ax1.set_xscale('log')
+x_min1, x_max1 = ax1.get_xlim()
+x_vals1 = np.linspace(x_min1, x_max1, 1000)
+ax1.set_xlim(x_min1, x_max1)
+ax1.plot(x_vals1, [predicted_full(val, r) for val in x_vals1], c='k',
+         label=r'$p_\infty$', linestyle='dashed', alpha=0.3, zorder=-10)
 ax1.set_xlabel("$k$")
 ax1.set_ylabel("$p(k)$")
 ax1.set_title("(A)")
 
-# x_min2, x_max2 = ax2.get_xlim()
-# x_vals2 = np.linspace(m/n_values[0]**0.5, x_max2, 1000)
-# ax2.plot(x_vals2, [p_infinity_collapsed(m)
-#          for _ in x_vals2], c='k', label=r'$p_\infty(k)$', linestyle='dashed', alpha=0.3)
 ax2.set_yscale('log')
 ax2.set_xscale('log')
-ax2.set_xlabel(r"$k \, / \, k_1$")
-ax2.set_ylabel(r"$p(k) \, / \, (\frac{m}{m+1}) ^{-k}$")
+x_min2, x_max2 = ax2.get_xlim()
+x_vals2 = np.linspace(x_min2, x_max2, 1000)
+ax2.set_xlim(x_min2, x_max2)
+ax2.plot(x_vals2, [1 for _ in x_vals2], c='k',
+         label=r'$p_\infty(k)$', linestyle='dashed', alpha=0.3, zorder=-10)
+ax2.set_xlabel(r"$k \, / \, N^{1/2}$")
+ax2.set_ylabel(r"$p(k) \, / \, p_\infty (k)$")
 ax2.set_title("(B)")
 ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left',
            borderaxespad=0., markerscale=2)

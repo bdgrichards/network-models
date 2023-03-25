@@ -5,9 +5,9 @@ from utils import data_folder, figures_folder
 import pickle
 import numpy as np
 
-m = 20
+m = 10
 n_values = [100000, 10000, 1000, 100]
-repeats = 100
+repeats = 1000
 num_bins = 30
 filename = 'ra_varying_n'
 
@@ -16,16 +16,13 @@ def p_infinity(k, m):
     return (1/(m+1))*(m/(m+1))**(k-m)
 
 
-def p_infinity_collapsed(m):
-    return (1/(m+1))*(m/(m+1))**(-m)
-
-
 def scale_y(p, m, k):
-    return p*(m/(m+1))**(-k)
+    return p/((1/(m+1))*(m/(m+1))**(k-m))
 
 
 def scale_x(k, n, a, b):
     return k/(11.5*np.log(n)-13.3)
+    # return k/np.log(n)
 
 
 fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
@@ -70,22 +67,24 @@ for n in n_values:
     print(n, "complete")
 
 
-x_min1, x_max1 = ax1.get_xlim()
-x_vals1 = np.linspace(m, x_max1, 1000)
-ax1.plot(x_vals1, p_infinity(x_vals1, m), c='k',
-         label=r'$p_\infty$', linestyle='dashed', alpha=0.3)
 ax1.set_yscale('log')
+x_min1, x_max1 = ax1.get_xlim()
+x_vals1 = np.linspace(x_min1, x_max1, 1000)
+ax1.plot(x_vals1, p_infinity(x_vals1, m), c='k',
+         label=r'$p_\infty$', linestyle='dashed', alpha=0.3, zorder=-10)
+ax1.set_xlim(x_min1, x_max1)
 ax1.set_xlabel("$k$")
 ax1.set_ylabel("$p(k)$")
 ax1.set_title("(A)")
 
-# x_min2, x_max2 = ax2.get_xlim()
-# x_vals2 = np.linspace(m/n_values[0]**0.5, x_max2, 1000)
-# ax2.plot(x_vals2, [p_infinity_collapsed(m)
-#          for _ in x_vals2], c='k', label=r'$p_\infty(k)$', linestyle='dashed', alpha=0.3)
 ax2.set_yscale('log')
+x_min2, x_max2 = ax2.get_xlim()
+x_vals2 = np.linspace(x_min2, x_max2, 10)
+ax2.plot(x_vals2, [1
+         for _ in x_vals2], c='k', label=r'$p_\infty(k)$', linestyle='dashed', alpha=0.3, zorder=-10)
+ax2.set_xlim(x_min2, x_max2)
 ax2.set_xlabel(r"$k \, / \, k_1$")
-ax2.set_ylabel(r"$p(k) \, / \, (\frac{m}{m+1}) ^{-k}$")
+ax2.set_ylabel(r"$p(k) \, / \, p_\infty (k)$")
 ax2.set_title("(B)")
 ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left',
            borderaxespad=0., markerscale=2)

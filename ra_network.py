@@ -11,7 +11,7 @@ def ra_network(n: int, m: int):
     G = nx.complete_graph(m + 1)
 
     # create a repeated list of nodes to choose from
-    # with each node added degree(node) times
+    # with each node added once
     node_choices = [node for node, _ in G.degree()]
 
     def get_targets(m: int):
