@@ -40,12 +40,12 @@ def test_3():
 
 def test_4():
     """
-    Check there are less than m nodes with degree less than m
+    Check there are 0 nodes with degree less than m
     """
     n = 10000
     m = 4
     G = ra_network(n, m)
-    print("Expected: <%i" % m)
+    print("Expected: 0")
     print("Measured:", sum([d for _, d in G.degree() if d < m]))
 
 

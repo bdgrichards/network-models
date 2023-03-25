@@ -5,16 +5,20 @@ import pickle
 import numpy as np
 from scipy.optimize import curve_fit
 
+# parameters
 m = 10
 n_values = [128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]
 repeats = 100
 filename = 'ra_k1'
 
-fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
+# create plots
+fig = plt.figure(figsize=(6.4, 3), tight_layout=True)
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
 
+# get data
 k1_values = []
+k1_errs = []
 for n in n_values:
     data = []
     # if saved data, use that, else generate new data
@@ -34,7 +38,9 @@ for n in n_values:
         with open(data_folder + filename + str('_%d' % n), "wb") as f:
             pickle.dump(data, f)
     k1_values.append(np.mean(data))
+    k1_errs.append(np.std(data)/np.sqrt(np.sum(data)))
     print(n, "complete")
+print("Max err: %.3f min err: %.3f" % (max(k1_errs), min(k1_errs)))
 
 
 def expected(N, m):
@@ -45,6 +51,7 @@ def fit(x, a, b):
     return a*np.log(x) + b
 
 
+# curve fit the data
 popt, pcov = curve_fit(fit, n_values, k1_values, p0=(1, 1))
 print("Fit: y = %.4f +/- %.4f ln(N) + %.4f +/- %.4f" %
       (popt[0], np.sqrt(pcov[0, 0]), popt[1], np.sqrt(pcov[1, 1])))

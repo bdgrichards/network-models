@@ -43,4 +43,5 @@ def ra_network(n: int, m: int):
         # update current size
         current_size += 1
 
+    # return the graph
     return G

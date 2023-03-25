@@ -5,6 +5,7 @@ from utils import data_folder, figures_folder
 import pickle
 import numpy as np
 
+# parameters
 m = 10
 n_values = [100000, 10000, 1000, 100]
 repeats = 1000
@@ -20,15 +21,17 @@ def scale_y(p, m, k):
     return p/((1/(m+1))*(m/(m+1))**(k-m))
 
 
-def scale_x(k, n, a, b):
+def scale_x(k, n):
     return k/(11.5*np.log(n)-13.3)
     # return k/np.log(n)
 
 
-fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
+# create plots
+fig = plt.figure(figsize=(6.4, 3), tight_layout=True)
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
 
+# get data
 for n in n_values:
     data = []
     # if saved data, use that, else generate new data
@@ -58,7 +61,7 @@ for n in n_values:
 
     scaled_y = [scale_y(y[i], m, x[i]) for i in range(len(y))]
     scaled_yerr = [scale_y(yerr[i], m, x[i]) for i in range(len(y))]
-    scaled_x = [scale_x(x[i], n, 1.5, 0.3) for i in range(len(y))]
+    scaled_x = [scale_x(x[i], n) for i in range(len(y))]
     ax2.errorbar(scaled_x, scaled_y, scaled_yerr, color="C%i" %
                  n_values.index(n), linestyle='', alpha=0.7)  # type:ignore
     ax2.scatter(scaled_x, scaled_y, label=r"N = $10^{%i}$" % np.log10(n), color="C%i" %

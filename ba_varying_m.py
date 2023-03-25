@@ -2,7 +2,7 @@ from ba_network import ba_network
 import matplotlib.pyplot as plt
 import numpy as np
 from logbin import logbin
-from utils import data_folder, figures_folder
+from utils import data_folder, figures_folder, chi_sqr
 import pickle
 
 # setup parameters
@@ -111,17 +111,6 @@ plt.savefig(figures_folder + 'ba_varying_m.svg',
 
 
 # perform chi squared test
-
-
-def chi_sqr(f, x, y, yerr):
-    if len(x) != len(y) != len(yerr):
-        raise Exception("Invalid arguments")
-    total = 0
-    for i in range(len(x)):
-        total += ((y[i] - f(x[i]))/yerr[i])**2
-    return total
-
-
 # re-bin the data across multiple m values
 binned_x = np.unique(chi_sqr_x_vals)
 binned_y = []
