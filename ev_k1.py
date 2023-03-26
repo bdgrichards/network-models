@@ -38,10 +38,6 @@ for n in n_values:
     print(n, "complete")
 
 
-# def expected(N, m):
-#     return m + (np.log(N) / (np.log(m+1) - np.log(m)))
-
-
 def fit(x, a, b):
     return a*x**b
 
@@ -55,8 +51,6 @@ ax1.scatter(n_values, k1_values, label='Observed',
 ax1.set_xscale('log')
 xmin1, xmax1 = ax1.get_xlim()
 xvals1 = np.linspace(xmin1, xmax1, 1000)
-# ax1.plot(xvals1, [expected(x, m) for x in xvals1],
-#          label='Expected', c='k', linestyle='dashed')
 ax1.plot(xvals1, [fit(x, *popt) for x in xvals1],
          label=r'$\alpha N^{\beta}$ Fit', c='C2', linestyle='dashed', alpha=0.5)
 ax1.set_xlim(xmin1, xmax1)
@@ -70,8 +64,6 @@ ax2.set_xscale('log')
 ax2.set_yscale('log')
 xmin2, xmax2 = ax2.get_xlim()
 xvals2 = np.linspace(xmin2, xmax2, 1000)
-# ax2.plot(xvals2, [expected(x, m) for x in xvals2],
-#          label='Expected', c='k', linestyle='dashed')
 ax2.plot(xvals2, [fit(x, *popt) for x in xvals2],
          label=r'$\alpha N^{\beta}$ Fit', c='C2', linestyle='dashed', alpha=0.5)
 ax2.set_xlim(xmin2, xmax2)

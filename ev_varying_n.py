@@ -6,20 +6,13 @@ import pickle
 import numpy as np
 import scipy as sp
 
+# parameters
 m = 12
 r = int(m/3)
 n_values = [100000, 10000, 1000, 100]
 repeats = 100
 logbin_scale = 1.1
 filename = 'ev_varying_n'
-
-
-# def p_infinity(k, m):
-#     return (1/(m+1))*(m/(m+1))**(k-m)
-
-
-# def p_infinity_collapsed(m):
-#     return (1/(m+1))*(m/(m+1))**(-m)
 
 
 def predicted_full(k, r):
@@ -41,10 +34,12 @@ def scale_x(k, n):
     return k/(n**(0.52))
 
 
-fig = plt.figure(figsize=(6.5, 3), tight_layout=True)
+# create plots
+fig = plt.figure(figsize=(6.4, 3), tight_layout=True)
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
 
+# get data
 for n in n_values:
     data = []
     # if saved data, use that, else generate new data
@@ -64,18 +59,14 @@ for n in n_values:
         with open(data_folder + filename + str('_%d' % n), "wb") as f:
             pickle.dump(data, f)
 
-    x, y, _ = logbin(data, logbin_scale)
-    # ax1.errorbar(x, y, yerr, color="C%i" %
-    #              n_values.index(n), linestyle='', alpha=0.7)
+    x, y, yerr = logbin(data, logbin_scale)
+
     ax1.scatter(x, y, label=r"N = $10^{%i}$" % np.log10(
         n), color="C%i" % n_values.index(n), s=5, marker='x', linewidths=1)  # type:ignore
     ax1.plot(x, y, color="C%i" % n_values.index(n), alpha=0.2)
 
     scaled_y = [scale_y(y[i], x[i]) for i in range(len(y))]
-    # scaled_yerr = [scale_y(yerr[i], m, x[i]) for i in range(len(y))]
     scaled_x = [scale_x(x[i], n) for i in range(len(y))]
-    # ax2.errorbar(scaled_x, scaled_y, scaled_yerr, color="C%i" %
-    #              n_values.index(n), linestyle='', alpha=0.7)  # type:ignore
     ax2.scatter(scaled_x, scaled_y, label=r"N = $10^{%i}$" % np.log10(n), color="C%i" %
                 n_values.index(n), s=5, marker='x', linewidths=1)  # type:ignore
     ax2.plot(scaled_x, scaled_y, color="C%i" % n_values.index(n), alpha=0.2)

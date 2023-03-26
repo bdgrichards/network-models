@@ -60,7 +60,7 @@ def test_5():
     """
     n = 20
     m = 4
-    r = 1
+    r = 2
     G = ev_network(n, m, r)
     nx.draw_networkx(G)
     plt.show()

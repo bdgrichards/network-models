@@ -69,4 +69,5 @@ def ev_network(n: int, m: int, r: int):
         # update current size
         current_size += 1
 
+    # return the graph
     return G

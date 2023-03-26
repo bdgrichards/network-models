@@ -29,9 +29,6 @@ def predicted_function(k, m):
 chi_sqr_x_vals = []
 chi_sqr_y_vals = []
 chi_sqr_y_errs = []
-# save figure lims for ax2
-xlims2 = []
-ylims2 = []
 
 # get data
 for m in m_values:
@@ -67,13 +64,13 @@ for m in m_values:
         ax2.set_yscale('log')
         ax2.scatter(trunc_x, trunc_y, color="C%i" % m_values.index(m), s=15,
                     marker='x', linewidths=1)  # type:ignore
-        xlims2 = ax2.get_xlim()
-        ylims2 = ax2.get_ylim()
-        ax2.set_xlim(xlims2[0]-30, xlims2[1]+30)
-        ax2.set_ylim(ylims2[0]-1e-4, ylims2[1]+2e-3)
-        xlims2 = ax2.get_xlim()
-        ylims2 = ax2.get_ylim()
-        xvals = np.linspace(xlims2[0], xlims2[1], 100)
+        xlims = ax2.get_xlim()
+        ylims = ax2.get_ylim()
+        ax2.set_xlim(xlims[0]-30, xlims[1]+30)
+        ax2.set_ylim(ylims[0]-1e-4, ylims[1]+2e-3)
+        xlims = ax2.get_xlim()
+        ylims = ax2.get_ylim()
+        xvals = np.linspace(xlims[0], xlims[1], 100)
         ax2.plot(xvals, [predicted_function(k, m)
                  for k in xvals], color="k", alpha=0.2, zorder=-10)
 
@@ -102,10 +99,9 @@ ax1.set_title('(A)')
 ax2.set_ylabel(r"$p(k)$")
 ax2.set_xlabel(r"$k$")
 ax2.set_title('(B)')
-xlims2 = ax2.get_xlim()
-ylims2 = ax2.get_ylim()
+# to change legend ordering
 ax2.plot([0, 0], [0, 0], color="k", alpha=0.2,
-         zorder=-10, label=r'$p_\infty(k)$')
+         zorder=-10, label=r"$p_\infty(k)$")
 ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left',
            borderaxespad=0., title=r'$m$', markerscale=2)
 
