@@ -111,11 +111,11 @@ plt.savefig(figures_folder + 'ra_varying_m.svg',
 # chi squared test
 
 
-def predicted_func_wrapper(k):
-    return predicted_function(k, 128)
+# def predicted_func_wrapper(k):
+#     return predicted_function(k, 128)
 
 
-# calculate chi squared
-print("Chi Squared: %.3f" % chi_sqr(f=predicted_func_wrapper,
-      x=chi_sqr_x_vals, y=chi_sqr_y_vals, yerr=chi_sqr_y_errs))
-print("DoF: %i" % len(chi_sqr_x_vals))
+# # calculate chi squared
+# print("Chi Squared: %.3f" % chi_sqr(f=predicted_func_wrapper,
+#       x=chi_sqr_x_vals, y=chi_sqr_y_vals, yerr=chi_sqr_y_errs))
+# print("DoF: %i" % len(chi_sqr_x_vals))

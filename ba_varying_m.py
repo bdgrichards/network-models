@@ -110,18 +110,18 @@ plt.savefig(figures_folder + 'ba_varying_m.svg',
             format='svg', bbox_inches='tight')
 
 
-# perform chi squared test
-# re-bin the data across multiple m values
-binned_x = np.unique(chi_sqr_x_vals)
-binned_y = []
-binned_yerr = []
-for x_i in binned_x:
-    y_values_list = [chi_sqr_y_vals[ind] for ind in range(
-        len(chi_sqr_y_vals)) if chi_sqr_x_vals[ind] == x_i]
-    binned_y.append(np.mean(y_values_list))
-    binned_yerr.append(np.std(y_values_list))
+# # perform chi squared test
+# # re-bin the data across multiple m values
+# binned_x = np.unique(chi_sqr_x_vals)
+# binned_y = []
+# binned_yerr = []
+# for x_i in binned_x:
+#     y_values_list = [chi_sqr_y_vals[ind] for ind in range(
+#         len(chi_sqr_y_vals)) if chi_sqr_x_vals[ind] == x_i]
+#     binned_y.append(np.mean(y_values_list))
+#     binned_yerr.append(np.std(y_values_list))
 
-# calculate chi squared
-print("Chi Squared: %.3f" % chi_sqr(f=predicted_func,
-      x=binned_x, y=binned_y, yerr=binned_yerr))
-print("DoF: %i" % len(binned_x))
+# # calculate chi squared
+# print("Chi Squared: %.3f" % chi_sqr(f=predicted_func,
+#       x=binned_x, y=binned_y, yerr=binned_yerr))
+# print("DoF: %i" % len(binned_x))
