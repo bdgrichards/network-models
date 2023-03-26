@@ -83,7 +83,7 @@ for m in m_values:
                 label=m, marker='x', linewidths=1)  # type:ignore
     ax1.plot(x, y, color="C%i" % m_values.index(m), alpha=0.2)
     ax1.plot(x, [predicted_function(k, m) for k in x], color="C%i" % m_values.index(m),
-             linestyle='dotted')
+             linestyle='dashed', alpha=0.3)
 
     # invisible lines for the legend
     ax2.scatter([0, 0], [0, 0], color="C%i" % m_values.index(m), s=5,
