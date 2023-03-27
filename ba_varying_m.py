@@ -98,7 +98,7 @@ x_vals = np.linspace(xmin2, xmax2, 1000)
 ax2.hlines([p_cutoff], xmin=0, xmax=0,
            color='k', linestyle='dashed', alpha=0.2, label=r"$p(k) = 10^{-4}$")
 ax2.plot(x_vals, predicted_func(x_vals),
-         label=r'$\frac{1}{k(k+1)(k+2)}$', c='k', zorder=-1, alpha=0.2)
+         label=r'$p_\infty(k)$', c='k', zorder=-1, alpha=0.2)
 ax2.set_xlim(xmin2, xmax2)
 ax2.set_ylabel(r"$p(k) \, / \, 2m(m+1)$")
 ax2.set_xlabel(r"$k$")
